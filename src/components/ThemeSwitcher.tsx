@@ -21,21 +21,20 @@ export function ThemeSwitcher() {
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
 
   useEffect(() => {
-    const root = document.documentElement;
+    // Delay until after hydration is fully complete
+    const id = requestAnimationFrame(() => {
+      const root = document.documentElement;
 
-    root.classList.add("disable-transitions");
+      if (theme === "dark") {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
 
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    localStorage.setItem(STORAGE_KEY, theme);
-
-    requestAnimationFrame(() => {
-      root.classList.remove("disable-transitions");
+      localStorage.setItem(STORAGE_KEY, theme);
     });
+
+    return () => cancelAnimationFrame(id);
   }, [theme]);
 
   const isDark = theme === "dark";

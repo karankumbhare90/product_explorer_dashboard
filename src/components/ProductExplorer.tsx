@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Product } from "@/types/product";
 import { useFavorites } from "./FavoritesContext";
@@ -13,6 +12,7 @@ interface ProductExplorerProps {
 const PAGE_SIZE = 8;
 
 export function ProductExplorer({ products }: ProductExplorerProps) {
+
   const { favorites, isFavorite } = useFavorites();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("all");
@@ -53,27 +53,16 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
     const sentinel = loadMoreRef.current;
     if (!sentinel) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting) {
-          setVisibleCount((current) => {
-            if (current >= filtered.length) return current;
-            return current + PAGE_SIZE;
-          });
-        }
-      },
-      {
-        rootMargin: "200px",
-        threshold: 0.1,
-      },
-    );
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setVisibleCount((current) =>
+          current >= filtered.length ? current : current + PAGE_SIZE,
+        );
+      }
+    });
 
     observer.observe(sentinel);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [filtered.length]);
 
   const hasMore = visibleProducts.length < filtered.length;
