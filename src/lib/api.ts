@@ -3,22 +3,29 @@ import { Product } from "@/types/product";
 const BASE_URL = "https://fakestoreapi.com";
 
 export async function fetchProducts(): Promise<Product[]> {
-  const res = await fetch(`${BASE_URL}/products`, {
-    cache: "no-store",
-    next: { revalidate: 60 },
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/products`, {
+      cache: "no-store",
+      next: { revalidate: 60 },
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
+    if (!res.ok) {
+      console.error("Products API failed:", res.status);
+      return [];
+    }
+
+    const data = (await res.json()) as Product[];
+
+    // Basic runtime validation to guard against unexpected API changes
+    if (!Array.isArray(data)) {
+      console.error("Invalid products response");
+      return [];
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Fetch products error:", error);
+    return [];
   }
-
-  const data = (await res.json()) as Product[];
-
-  // Basic runtime validation to guard against unexpected API changes
-  if (!Array.isArray(data)) {
-    throw new Error("Unexpected products response shape");
-  }
-
-  return data;
 }
 

@@ -9,7 +9,7 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-black">
+      <body className="flex w-full min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-black">
         <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-6 text-center shadow-sm dark:border-red-900/40 dark:bg-zinc-950">
           <h1 className="text-lg font-semibold text-red-700 dark:text-red-400">
             Something went wrong
