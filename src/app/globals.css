@@ -1,0 +1,76 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================
+   Base theme variables
+========================= */
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* =========================
+   Smooth page transition
+========================= */
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition:
+    background-color 350ms ease,
+    color 350ms ease;
+}
+
+/* =========================
+   Disable transitions on load
+========================= */
+.disable-transitions,
+.disable-transitions * {
+  transition: none !important;
+}
+
+/* =========================
+   Radial theme reveal effect
+========================= */
+.theme-reveal {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0.15) 25%,
+    rgba(0, 0, 0, 0.25) 50%,
+    rgba(0, 0, 0, 0.45)
+  );
+  animation: reveal 500ms ease-out forwards;
+}
+
+.dark .theme-reveal {
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.15) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.35)
+  );
+}
+
+@keyframes reveal {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(5px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
