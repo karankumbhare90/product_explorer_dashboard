@@ -4,7 +4,7 @@ const BASE_URL = "https://fakestoreapi.com";
 
 export async function fetchProducts(): Promise<Product[]> {
   const res = await fetch(`${BASE_URL}/products`, {
-    // Cache on server for a short period; can be tuned as needed
+    cache: "no-store",
     next: { revalidate: 60 },
   });
 
