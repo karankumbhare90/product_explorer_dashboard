@@ -96,13 +96,13 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
             <label className="block text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
               Search
             </label>
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setVisibleCount(PAGE_SIZE);
-                }}
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
               placeholder="Search by product title..."
               className="mt-1 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-400 focus:bg-transparent focus:ring-2 focus:ring-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800 bg-transparent"
             />
