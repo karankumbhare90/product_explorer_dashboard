@@ -123,7 +123,7 @@ export function ProductExplorer() {
                 setVisibleCount(PAGE_SIZE);
               }}
               placeholder="Search by product title..."
-              className="mt-1 w-full rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm"
             />
           </div>
 
