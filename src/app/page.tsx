@@ -1,11 +1,11 @@
-export const dynamic = "force-dynamic";
-import { fetchProducts } from "@/lib/api";
+// export const dynamic = "force-dynamic";
+// import { fetchProducts } from "@/lib/api";
 import { ProductExplorer } from "@/components/ProductExplorer";
 
 export default async function Home() {
-  const products = await fetchProducts();
-  console.log("Products : ", products)
+  // const products = await fetchProducts();
+  // console.log("Products : ", products)
 
-  return <ProductExplorer products={products} />;
+  return <ProductExplorer />;
 }
 

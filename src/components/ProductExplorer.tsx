@@ -1,19 +1,21 @@
-"use client"
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Product } from "@/types/product";
 import { useFavorites } from "./FavoritesContext";
 import { ProductCard } from "./ProductCard";
 import { CategorySelect } from "./CategorySelect";
 
-interface ProductExplorerProps {
-  products: Product[];
-}
 const PAGE_SIZE = 8;
+const API_URL = "https://fakestoreapi.com/products";
 
-export function ProductExplorer({ products }: ProductExplorerProps) {
-
+export function ProductExplorer() {
   const { favorites, isFavorite } = useFavorites();
+
   const [mounted, setMounted] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
@@ -21,6 +23,23 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
+  /* ---------------- CLIENT FETCH (FIXES 403) ---------------- */
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(Array.isArray(data) ? data : []);
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  /* ---------------- HYDRATION SAFETY ---------------- */
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  /* ---------------- DERIVED DATA ---------------- */
   const categories = useMemo(() => {
     const set = new Set<string>();
     products.forEach((p) => set.add(p.category));
@@ -49,6 +68,7 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
     [filtered, visibleCount],
   );
 
+  /* ---------------- INFINITE SCROLL ---------------- */
   useEffect(() => {
     const sentinel = loadMoreRef.current;
     if (!sentinel) return;
@@ -65,11 +85,8 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
     return () => observer.disconnect();
   }, [filtered.length]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  /* ---------------- LOADING STATES ---------------- */
+  if (!mounted || loading) {
     return (
       <div className="flex flex-1 items-center justify-center text-sm text-zinc-400">
         Loading products…
@@ -79,6 +96,7 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
 
   const hasMore = visibleProducts.length < filtered.length;
 
+  /* ---------------- UI ---------------- */
   return (
     <section className="mx-auto flex container px-4 md:px-0 flex-1 flex-col gap-6 py-8 sm:py-10 lg:py-12">
       <header className="flex flex-col gap-4">
@@ -105,7 +123,7 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
                 setVisibleCount(PAGE_SIZE);
               }}
               placeholder="Search by product title..."
-              className="mt-1 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-400 focus:bg-transparent focus:ring-2 focus:ring-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800 bg-transparent"
+              className="mt-1 w-full rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
             />
           </div>
 
@@ -122,7 +140,7 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
               />
             </div>
 
-            <label className="mt-1 inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-700 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 sm:mt-5">
+            <label className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm">
               <input
                 type="checkbox"
                 checked={showFavoritesOnly}
@@ -130,7 +148,6 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
                   setShowFavoritesOnly(e.target.checked);
                   setVisibleCount(PAGE_SIZE);
                 }}
-                className="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
               />
               <span>Show favorites only</span>
             </label>
@@ -140,7 +157,7 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
 
       <main className="flex-1">
         {filtered.length === 0 ? (
-          <div className="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-400">
+          <div className="flex min-h-[200px] items-center justify-center text-sm text-zinc-400">
             No products match your filters.
           </div>
         ) : (
@@ -154,15 +171,15 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
                 />
               ))}
             </div>
+
             <div ref={loadMoreRef} className="flex justify-center py-6">
               {hasMore ? (
-                <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                  <span>Loading more products as you scroll...</span>
-                </div>
+                <p className="text-sm text-zinc-400">
+                  Loading more products…
+                </p>
               ) : (
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                  You&apos;ve reached the end of the list.
+                <p className="text-xs text-zinc-400">
+                  You&apos;ve reached the end.
                 </p>
               )}
             </div>
@@ -172,4 +189,3 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
     </section>
   );
 }
-
