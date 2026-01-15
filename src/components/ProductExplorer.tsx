@@ -14,6 +14,7 @@ const PAGE_SIZE = 8;
 export function ProductExplorer({ products }: ProductExplorerProps) {
 
   const { favorites, isFavorite } = useFavorites();
+  const [mounted, setMounted] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
@@ -64,6 +65,18 @@ export function ProductExplorer({ products }: ProductExplorerProps) {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [filtered.length]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex flex-1 items-center justify-center text-sm text-zinc-400">
+        Loading products…
+      </div>
+    );
+  }
 
   const hasMore = visibleProducts.length < filtered.length;
 
