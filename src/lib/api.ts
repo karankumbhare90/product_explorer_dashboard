@@ -15,6 +15,9 @@ export async function fetchProducts(): Promise<Product[]> {
 
     const data = (await res.json()) as Product[];
 
+    console.log("Data : ", { data })
+    console.log("Data 2 : ", data)
+
     // Basic runtime validation to guard against unexpected API changes
     if (!Array.isArray(data)) {
       console.error("Invalid products response");

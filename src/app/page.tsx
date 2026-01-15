@@ -4,6 +4,7 @@ import { ProductExplorer } from "@/components/ProductExplorer";
 
 export default async function Home() {
   const products = await fetchProducts();
+  console.log("Products : ", products)
 
   return <ProductExplorer products={products} />;
 }

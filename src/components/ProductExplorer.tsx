@@ -8,7 +8,6 @@ import { CategorySelect } from "./CategorySelect";
 interface ProductExplorerProps {
   products: Product[];
 }
-
 const PAGE_SIZE = 8;
 
 export function ProductExplorer({ products }: ProductExplorerProps) {
