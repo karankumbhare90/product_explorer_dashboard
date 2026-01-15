@@ -110,8 +110,8 @@ export function ProductExplorer() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 sm:flex-row sm:items-center sm:gap-4 sm:p-4">
-          <div className="flex-1">
+        <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 md:flex-row sm:items-center sm:gap-4 sm:p-4">
+          <div className="w-full flex-1">
             <label className="block text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
               Search
             </label>
@@ -127,8 +127,8 @@ export function ProductExplorer() {
             />
           </div>
 
-          <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex-1">
+          <div className="w-full flex flex-1 flex-col gap-2 md:flex-row items-center sm:items-end sm:gap-4">
+            <div className="flex-1 w-full md:w-auto">
               <CategorySelect
                 label="Category"
                 value={category}
@@ -140,7 +140,7 @@ export function ProductExplorer() {
               />
             </div>
 
-            <label className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm">
+            <label className="w-full md:w-auto inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm border-zinc-200 dark:border-zinc-700">
               <input
                 type="checkbox"
                 checked={showFavoritesOnly}
